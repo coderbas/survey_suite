@@ -1,0 +1,14 @@
+/* frontend/style.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+#survey-list {
+    margin: 20px;
+    padding: 10px;
+    background: #fff;
+    border-radius: 5px;
+}
