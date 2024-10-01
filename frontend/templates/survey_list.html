@@ -143,19 +143,22 @@
     <!-- Survey List -->
     <div class="survey-container">
         <div class="survey-card">
-            <img src="Crime.jpg" alt="Crime Prevention Survey">
+            <img src="{{ url_for('static', filename='Crime.jpg') }}" alt="Logo">
+
             <div class="survey-info">
                 <h3>Crime Prevention Survey</h3>
             </div>
         </div>
         <div class="survey-card">
-            <img src="fj_tourism.jpg" alt="Tourism Experience and Improvement Survey">
+            <img src="{{ url_for('static', filename='fj_tourism.jpg') }}" alt="Tourism Experience and Improvement Survey">
+            
             <div class="survey-info">
                 <h3>Tourism Experience and Improvement Survey</h3>
             </div>
         </div>
         <div class="survey-card">
-            <img src="brt.jpg" alt="Fujairah Public Services Satisfaction Survey">
+            <img src="{{ url_for('static', filename='brt.jpg') }}" alt="Fujairah Public Services Satisfaction Survey">
+           
             <div class="survey-info">
                 <h3>Fujairah Public Services Satisfaction Survey</h3>
             </div>

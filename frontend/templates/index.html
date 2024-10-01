@@ -51,13 +51,17 @@
 <body>
     <h1>Survey Suite</h1>
     <div class="logo">
-        <img src="fj_logo.jpeg" alt="Fujairah logo">
+        <img src="{{ url_for('static', filename='fj_logo.jpeg') }}" alt="Logo">
     </div>
     <div class="motto">
         <p>...Empowering Decisions with Data</p>
     </div>
     <div class="container">
-        <button>Continue</button>
+        <form action="/login" method="get">
+            <button type="submit">Continue</button>
+        </form>
     </div>
+
+   
 </body>
 </html>

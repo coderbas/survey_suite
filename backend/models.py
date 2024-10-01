@@ -1,38 +1,36 @@
 # backend/models.py
 import bcrypt
-from flask_mysqldb import MySQL
 from datetime import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_mysqldb import MySQL
 from flask import current_app
-from werkzeug.security import check_password_hash
 
 db = MySQL()
 
-
-
-def authenticate_user(email, password):
-    cur = db.connection.cursor()
-    cur.execute("SELECT Password FROM user WHERE EmailAddress = %s", (email,))
-    user = cur.fetchone()
-    cur.close()
-    
-    if user and check_password_hash(user[0], password):
-        return True
-    return False
-
 # User operations
 def create_user(name, phone_number, email_address, password, role_id):
+    try:
+        cur = db.connection.cursor()
+        cur.execute("INSERT INTO user (Name, PhoneNumber, EmailAddress, Password, RoleID) VALUES (%s, %s, %s, %s, %s)",
+                    (name, phone_number, email_address, password, role_id))
+        db.connection.commit()
+        cur.close()
+    except Exception as e:
+        current_app.logger.error(f"Error creating user: {str(e)}")
+        raise e
+
+# Authenticate user with email and password
+def authenticate_user(email, password):
     cur = db.connection.cursor()
-    cur.execute("INSERT INTO user (Name, PhoneNumber, EmailAddress, Password, RoleID) VALUES (%s, %s, %s, %s, %s)",
-                (name, phone_number, email_address, password, role_id))
-    db.connection.commit()
+    cur.execute("SELECT * FROM user WHERE EmailAddress = %s", (email,))
+    user = cur.fetchone()  # Get the user from the database
     cur.close()
 
-def authenticate_user(email_address):
-    cur = db.connection.cursor()
-    cur.execute("SELECT * FROM user WHERE EmailAddress = %s", (email_address,))
-    user = cur.fetchone()
-    cur.close()
-    return user
+    # Check if the user exists and password matches
+    if user and check_password_hash(user[5], password):  # Assuming user[5] is the password column
+        return user  # Return user details if authentication is successful
+    return None  # Return None if authentication fails
+
 
 def hash_password(password):
     return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
@@ -188,19 +186,6 @@ def get_apis():
     apis = cur.fetchall()
     cur.close()
     return apis
-
-
-# User operations
-def create_user(name, phone_number, email_address, password, role_id):
-    try:
-        cur = db.connection.cursor()
-        cur.execute("INSERT INTO user (Name, PhoneNumber, EmailAddress, Password, RoleID) VALUES (%s, %s, %s, %s, %s)",
-                    (name, phone_number, email_address, password, role_id))
-        db.connection.commit()
-        cur.close()
-    except Exception as e:
-        current_app.logger.error(f"Error creating user: {str(e)}")
-        raise e
 
     
 

@@ -1,9 +1,7 @@
-# backend/routes.py
-from flask import Blueprint, request, jsonify, redirect, url_for, session
-from models import create_user, get_surveys, get_survey_statistics, get_user_count, get_average_time, authenticate_user, hash_password, check_password
+from flask import Blueprint, request, jsonify, redirect, url_for, session, render_template, flash
+from models import create_user, get_surveys, get_survey_statistics, authenticate_user, hash_password, check_password
 from werkzeug.security import generate_password_hash
-import bcrypt
-
+import logging
 
 # Create a Blueprint for routes
 routes = Blueprint('routes', __name__)
@@ -12,101 +10,128 @@ def setup_routes(app):
     # Register the Blueprint with the app
     app.register_blueprint(routes)
 
-# Route to register a new user
-@routes.route('/register', methods=['POST'])
+# Serve the homepage
+@routes.route('/')
+def home():
+    return render_template('index.html')  # Use render_template for serving HTML
+
+# Serve the registration page
+@routes.route('/register', methods=['GET', 'POST'])
 def register():
-    data = request.form
-    name = data.get('name')
-    phone_number = data.get('telephone')
-    email_address = data.get('email')
-    password = data.get('password')
-    role_id = 1  # Default role id for regular users, this can be changed
+    if request.method == 'GET':
+        return render_template('registration.html')
+    
 
-    # Hash the password
-    hashed_password = generate_password_hash(password)
+    if request.method == 'POST':
+        data = request.form
+        name = data.get('name')
+        phone_number = data.get('telephone')
+        email_address = data.get('email')
+        password = data.get('password')
+        role_id = 1  # Default role id for regular users
 
-    # Create the user in the database
-    try:
-        create_user(name, phone_number, email_address, hashed_password, role_id)
-        return jsonify({"message": "User registered successfully!"}), 201
-    except Exception as e:
-        return jsonify({"error": str(e)}), 400
+        # Hash the password
+        hashed_password = generate_password_hash(password)
 
-# Route to log in a user
-@routes.route('/login', methods=['POST'])
+        # Create the user in the database
+        try:
+            create_user(name, phone_number, email_address, hashed_password, role_id)
+            return jsonify({"message": "User registered successfully!"}), 201
+        except Exception as e:
+            return jsonify({"error": str(e)}), 400
+
+# Serve the login page
+@routes.route('/login', methods=['GET', 'POST'])
 def login():
-    data = request.form
-    email = data.get('username')
-    password = data.get('password')
+    if request.method == 'GET':
+        return render_template('login.html')
 
-    # Fetch user from the database
-    user = authenticate_user(email)
+    if request.method == 'POST':
+            # Handle the login form submission
+            data = request.form
+            email = data.get('username')  # Fetch the email (assuming username is the email)
+            password = data.get('password')  # Fetch the password
 
-    if user and check_password(password, user[3]):  # Assuming user[3] is the password in DB
-        # Set session or token here to keep user logged in
-        session['user_id'] = user[0]  # Assuming user[0] is the user ID
-        return redirect(url_for('routes.dashboard'))
-    else:
-        return jsonify({"error": "Invalid credentials"}), 401
+            # Fetch user from the database
+            user = authenticate_user(email, password)
 
-# Route for the user dashboard (after login)
+            if user:
+                # Set session or token here to keep user logged in
+                session['user_id'] = user[0]  # Assuming user[0] is the user ID
+                return redirect(url_for('routes.dashboard'))
+            else:
+                flash('Invalid credentials, please try again.', 'danger')
+                return render_template('login.html')
+                
+
+# Serve the homepage dashboard
 @routes.route('/dashboard')
 def dashboard():
     if 'user_id' not in session:
         return redirect(url_for('routes.login'))
 
-    # Example: Retrieve user-specific data to show on the dashboard
-    return redirect(url_for('static', filename='admin.html'))
+    return render_template('homepage.html')
 
-# Route for logout
-@routes.route('/logout')
-def logout():
-    session.pop('user_id', None)  # Clear the session
-    return redirect(url_for('routes.login'))
+@routes.route('/admin_dashboard')
+def admin_dashboard():
+    if 'user_id' not in session:
+        return redirect(url_for('routes.login'))
+
+    return render_template('admin.html')
 
 
-# Define route handlers
+# Serve other routes like surveys, stats, etc.
 @routes.route('/survey', methods=['GET'])
 def list_surveys():
     surveys = get_surveys()
     return jsonify(surveys)
 
-@routes.route('/user', methods=['POST'])
-def add_user():
-    data = request.json
-    create_user(data['name'], data['phone_number'], data['email_address'], data['role_id'])
-    return jsonify({"message": "User created successfully"}), 201
+@routes.route('/survey_management')
+def survey_management():
+    if 'user_id' not in session:
+        return redirect(url_for('routes.login'))
+    
+    return render_template('survey_management.html')
 
-# New route to fetch admin dashboard statistics
-@routes.route('/admin/dashboard', methods=['GET'])
-def get_dashboard_data():
-    try:
-        # Get survey statistics for each survey (e.g., response count, average time, etc.)
-        surveys_stats = get_survey_statistics()
+@routes.route('/survey_list')
+def survey_list():
+    if 'user_id' not in session:
+        return redirect(url_for('routes.login'))
+    
+    return render_template('survey_list.html')
 
-        # Get the count of users (admins, participants, etc.)
-        user_count = get_user_count()
+@routes.route('/user_management')
+def user_management():
+    if 'user_id' not in session:
+        return redirect(url_for('routes.login'))
+    
+    return render_template('user_management_page.html')
 
-        # Example: Get average time taken to complete a survey
-        avg_time_crime_prevention = get_average_time(survey_name="Crime Prevention Survey")
+@routes.route('/analytics')
+def analytics():
+    if 'user_id' not in session:
+        return redirect(url_for('routes.login'))
+    
+    return render_template('analytics.html')
 
-        # Construct dashboard data response
-        dashboard_data = {
-            "survey_stats": surveys_stats,
-            "user_count": user_count,
-            "avg_time_crime_prevention": avg_time_crime_prevention
-        }
+@routes.route('/settings')
+def settings():
+    if 'user_id' not in session:
+        return redirect(url_for('routes.login'))
+    
+    return render_template('settings.html')
 
-        return jsonify(dashboard_data), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-@routes.route('/api/survey_stats', methods=['GET'])
-def survey_statistics():
-    stats = get_survey_statistics()
-    return jsonify(stats)
-
-#
+@routes.route('/help_support')
+def help_support():
+    if 'user_id' not in session:
+        return redirect(url_for('routes.login'))
+    
+    return render_template('help_support.html')
 
 
-
+@routes.route('/logout')
+def logout():
+    # Clear the session data
+    session.pop('user_id', None)
+    # Redirect to the login page after logout
+    return redirect(url_for('routes.login'))

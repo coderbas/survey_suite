@@ -104,7 +104,19 @@ button:hover {
 <body>
     <div class="container">
         <h1>Survey Suite</h1>
-        <img src="fj_logo.jpeg" alt="Fujairah Municipality Logo" class="logo">
+        <img src="{{ url_for('static', filename='fj_logo.jpeg') }}" alt="Logo">
+        <!-- Flash message section -->
+          {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+              <div>
+                  {% for category, message in messages %}
+                      <div class="alert alert-{{ category }}">
+                          {{ message }}
+                      </div>
+                  {% endfor %}
+              </div>
+          {% endif %}
+      {% endwith %}
         <form action="/login" method="POST">
             <div class="input-container">
                 <input type="text" id="username" name="username" required>
@@ -119,8 +131,10 @@ button:hover {
                 <label for="password">Password</label>
             </div>
             <button type="submit">Continue</button>
-            <a href="registration.html">Don't have an account? Register here</a>
-
+    
+        </form>
+        <form action="/register" method="get">
+            <button type="submit">Don't have an account? Register here</button>
         </form>
         <div class="social-login">
             <i class="bi bi-google" ></i>
