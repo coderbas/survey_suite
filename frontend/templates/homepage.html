@@ -8,67 +8,8 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        /* Custom Styles */
-        .navbar .navbar-brand .logo {
-            width: 50px;
-        }
+    <link rel="stylesheet" href="{{ url_for('static', filename='homepage.css') }}">
 
-        .card {
-            border-radius: 10px;
-            background-color: #f8f9fa;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .card:hover {
-            transform: scale(1.05);
-            background-color: #f2f2f2;
-        }
-
-        .card-body i {
-            color: #dc3545; /* Custom color for icons */
-        }
-
-        .navbar .dropdown-menu {
-            min-width: 200px;
-        }
-
-        .navbar .dropdown-item {
-            color: #333;
-            padding: 10px 20px;
-        }
-
-        .navbar .dropdown-item:hover {
-            background-color: #f8f9fa;
-            color: #007bff;
-        }
-
-        .input-group {
-            margin-top: 20px; /* Increased margin to prevent overlap */
-        }
-
-        .input-group .form-control {
-            border: 2px solid #ddd;
-            height: 40px;
-        }
-
-        .input-group .btn {
-            border: 2px solid #ddd;
-            background-color: white;
-        }
-
-        /* Custom Styles for the Dashboard Container */
-        .container.mt-4 {
-            background-color: #f0cccc;
-            padding: 20px;
-            border-radius: 8px;
-        }
-
-        .dropdown-toggle::after {
-            display: none; /* Hide the default dropdown arrow */
-        }
-    </style>
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -83,7 +24,7 @@
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="{{ url_for('routes.dashboard') }}">Home</a></li>
                         <li><a class="dropdown-item" href="#">Profile</a></li>
-                        <li><a class="dropdown-item" href="#">Settings</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('routes.settings') }}">Settings</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="{{ url_for('routes.logout') }}">Logout</a></li>
                     </ul>
@@ -93,13 +34,16 @@
             <!-- Brand Logo -->
             <a class="navbar-brand mx-auto" href="{{ url_for('routes.home') }}">
                 <img src="{{ url_for('static', filename='fj_logo.jpeg') }}" alt="Logo" style="width: 70px;">
-
             </a>
+
             <!-- User Profile Icon and Name -->
-            <div class="d-flex align-items-center">
-                <img src="avatar.png" alt="User Avatar" class="rounded-circle" style="width: 40px; height: 40px;">
-                <span class="ms-2">Harley</span>
+            <div class="d-flex flex-column align-items-center">
+                <img src="{{ url_for('static', filename='person.svg') }}" alt="User Avatar" class="rounded-circle" style="width: 60px; height: 60px; object-fit: cover;">
+                <p class="mt-2"><strong>{{ user.name }}</strong></p>
             </div>
+
+
+        
         </div>
     </nav>
 
@@ -124,7 +68,7 @@
         <div class="row text-center">
             <!-- Admin Dashboard -->
             <div class="col-6 col-md-4 mb-4">
-                <a href="{{ url_for('routes.admin_dashboard') }}"> <!-- Navigation link -->
+                <a href="{{ url_for('routes.admin_dashboard') }}">
                     <div class="card shadow-sm">
                         <div class="card-body">
                             <i class="fas fa-th fa-3x mb-2"></i>
@@ -135,7 +79,7 @@
             </div>
             <!-- Survey Management -->
             <div class="col-6 col-md-4 mb-4">
-                <a href="{{ url_for('routes.survey_management') }}"> <!-- Navigation link -->
+                <a href="{{ url_for('routes.survey_management') }}">
                     <div class="card shadow-sm">
                         <div class="card-body">
                             <i class="fas fa-clipboard fa-3x mb-2"></i>
@@ -146,7 +90,7 @@
             </div>
             <!-- User Management -->
             <div class="col-6 col-md-4 mb-4">
-                <a href="{{ url_for('routes.user_management') }}"> <!-- Navigation link -->
+                <a href="{{ url_for('routes.user_management') }}">
                     <div class="card shadow-sm">
                         <div class="card-body">
                             <i class="fas fa-users fa-3x mb-2"></i>
@@ -157,7 +101,7 @@
             </div>
             <!-- Analytics & Reporting -->
             <div class="col-6 col-md-4 mb-4">
-                <a href="{{ url_for('routes.analytics') }}"> <!-- Navigation link -->
+                <a href="{{ url_for('routes.analytics') }}">
                     <div class="card shadow-sm">
                         <div class="card-body">
                             <i class="fas fa-chart-line fa-3x mb-2"></i>
@@ -168,7 +112,7 @@
             </div>
             <!-- System Settings -->
             <div class="col-6 col-md-4 mb-4">
-                <a href="{{ url_for('routes.settings') }}"> <!-- Navigation link -->
+                <a href="{{ url_for('routes.settings') }}">
                     <div class="card shadow-sm">
                         <div class="card-body">
                             <i class="fas fa-cogs fa-3x mb-2"></i>
@@ -179,7 +123,7 @@
             </div>
             <!-- Help and Support -->
             <div class="col-6 col-md-4 mb-4">
-                <a href="{{ url_for('routes.help_support') }}"> <!-- Navigation link -->
+                <a href="{{ url_for('routes.help_support') }}">
                     <div class="card shadow-sm">
                         <div class="card-body">
                             <i class="fas fa-question-circle fa-3x mb-2"></i>

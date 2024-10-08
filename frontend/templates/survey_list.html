@@ -4,167 +4,108 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Survey List</title>
+    <!-- Bootstrap and Font Awesome CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-    <style>
-        body {
-    font-family: 'Poppins', sans-serif;
-    background-color: #f5f5f5;
-    margin: 0;
-    padding: 0;
-}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='survey_list.css') }}">
 
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.menu-icon {
-    font-size: 24px;
-    cursor: pointer;
-}
-
-.avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: #f0f0f0;
-    object-fit: cover;
-}
-
-.search-container {
-    position: relative;
-    width: 100%;
-    max-width: 500px;
-    margin: 20px auto;
-}
-
-.search-bar {
-    width: 100%;
-    padding: 10px 40px 10px 20px; /* Adjust padding to make room for the icon */
-    border: 1px solid #c66;
-    border-radius: 25px;
-    font-size: 16px;
-    box-sizing: border-box;
-}
- 
-.search-icon {
-    position: absolute;
-    right: 15px; /* Position icon inside the search bar */
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 20px; /* Adjust the size as needed */
-    color: black;
-    cursor: pointer;
-}
-.search-icon:hover {
-    color: #a44;
-}
-
-.icon {
-    position: absolute;
-    right: 35px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: black;
-    font-size: 20px;
-    cursor: pointer;
-}
-
-.survey-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 20px;
-}
-
-.survey-card {
-    position: relative;
-    background-color: white;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    transition: transform 0.2s ease;
-}
-
-.survey-card:hover {
-    transform: translateY(-5px);
-}
-
-.survey-card img {
-    width: 100%;
-    height: 150px; /* Adjust the height to fit better within the card */
-    object-fit: cover; /* Ensures the image covers the area without distortion */
-}
-
-.survey-info {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); /* Centers the text within the card */
-    text-align: center;
-    color: white; /* Text color for better visibility */
-    font-size: 18px;
-    font-weight: bold;
-    padding: 5px;
-    white-space: nowrap; /* Prevents text from wrapping */
-    overflow: hidden; /* Ensures text stays within the bounds */
-    text-overflow: ellipsis; /* Adds ellipsis if text overflows */
-}
-
-.icon:hover {
-    color: #a44;
-}
-
-    </style>
+        <!-- Bootstrap CSS -->
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Font Awesome for icons -->
 </head>
 <body>
 
-    <!-- Header Section -->
-    <div class="header">
-        <div class="menu-icon">
-            <span class="bi bi-list"></span>
+   <!-- Navigation Bar -->
+   <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <!-- Sidebar Dropdown -->
+        <div class="navbar-nav">
+            <div class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-bars"></i>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="{{ url_for('routes.dashboard') }}">Home</a></li>
+                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('routes.settings') }}">Settings</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{{ url_for('routes.logout') }}">Logout</a></li>
+                </ul>
+            </div>
         </div>
-        <h1>Survey List</h1>
-        <img src="avatar.jpg" alt="User Avatar" class="avatar">
-    </div>
 
-    <!-- Search Bar -->
-    <div class="search-container">
-        <input type="text" placeholder="Search surveys..." class="search-bar">
-        <span class="icon bi bi-search"></span>
-    </div>
+        <!-- Brand Logo -->
+        <a class="navbar-brand mx-auto" href="{{ url_for('routes.home') }}">
+            <img src="{{ url_for('static', filename='fj_logo.jpeg') }}" alt="Logo" style="width: 70px;">
+        </a>
 
+        <!-- User Profile Icon and Name -->
+        <div class="d-flex flex-column align-items-center">
+            <img src="{{ url_for('static', filename='person.svg') }}" alt="User Avatar" class="rounded-circle" style="width: 60px; height: 60px; object-fit: cover;">
+            <p class="mt-2"><strong>{{ user.name }}</strong></p>
+        </div>
+
+
+    
+    </div>
+</nav>
+  <!-- Title Section -->
+  <div class="container text-center mt-4">
+    <h1 class="display-4">Survey List</h1>
+</div>
+<!-- Search Bar Section -->
+<div class="container my-3">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="input-group mt-3"> <!-- Added 'mt-3' to add margin to the top -->
+                <input type="text" class="form-control rounded-pill" placeholder="Search surveys...">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary rounded-pill ml-2" type="button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+  
+
+   
     <!-- Survey List -->
-    <div class="survey-container">
-        <div class="survey-card">
-            <img src="{{ url_for('static', filename='Crime.jpg') }}" alt="Logo">
-
-            <div class="survey-info">
-                <h3>Crime Prevention Survey</h3>
+    <div class="container mt-4 survey-container">
+        <div class="row">
+            <!-- Survey Cards -->
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm">
+                    <img src="{{ url_for('static', filename='Crime.jpg') }}" class="card-img-top" alt="Crime Prevention Survey">
+                    <div class="card-body">
+                        <h5 class="card-title">Crime Prevention Survey</h5>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="survey-card">
-            <img src="{{ url_for('static', filename='fj_tourism.jpg') }}" alt="Tourism Experience and Improvement Survey">
-            
-            <div class="survey-info">
-                <h3>Tourism Experience and Improvement Survey</h3>
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm">
+                    <img src="{{ url_for('static', filename='fj_tourism.jpg') }}" class="card-img-top" alt="Tourism Experience and Improvement Survey">
+                    <div class="card-body">
+                        <h5 class="card-title">Tourism Experience Survey</h5>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="survey-card">
-            <img src="{{ url_for('static', filename='brt.jpg') }}" alt="Fujairah Public Services Satisfaction Survey">
-           
-            <div class="survey-info">
-                <h3>Fujairah Public Services Satisfaction Survey</h3>
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm">
+                    <img src="{{ url_for('static', filename='brt.jpg') }}" class="card-img-top" alt="Fujairah Public Services Satisfaction Survey">
+                    <div class="card-body">
+                        <h5 class="card-title">Fujairah Public Services Satisfaction Survey</h5>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

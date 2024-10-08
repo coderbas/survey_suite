@@ -1,0 +1,95 @@
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    width: 80%;
+    max-width: 900px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+h1 {
+    color: #c41230; /* Fujairah Municipality red */
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
+p {
+    color: #555;
+    font-size: 18px;
+    margin-bottom: 40px;
+}
+
+h3 {
+    color: #555;
+    font-weight: 500;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+input[type="radio"], input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+label {
+    font-size: 16px;
+    color: #555;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #c41230;
+    border-radius: 30px;
+    font-size: 16px;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+}
+
+input[type="text"]:focus {
+    border-color: #a50b24;
+    background-color: #ffffff;
+    box-shadow: 0 0 8px rgba(197, 18, 48, 0.3); /* Glow on focus */
+    outline: none;
+}
+
+button {
+    padding: 14px;
+    background-color: #c41230;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 20px;
+    display: block;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #a50b24;
+    transform: translateY(-2px);
+    box-shadow: 0px 6px 20px rgba(197, 18, 48, 0.2); /* Button shadow */
+}
+
+.logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.logo img {
+    width: 100px;
+}
+

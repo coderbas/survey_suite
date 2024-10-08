@@ -1,0 +1,127 @@
+
+body {
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f4f4f4; /* Light background */
+}
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.alert-success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+.alert-danger {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+
+
+.container {
+    text-align: center;
+    width: 350px;
+    padding: 40px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+}
+
+h1 {
+    margin-bottom: 20px;
+    font-weight: 600;
+    color: #c41230; /* Fujairah Municipality red */
+}
+
+img {
+    width: 100px;
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.input-container {
+    position: relative;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select {
+    width: 100%;
+    padding: 12px 20px;
+    border: 2px solid #c41230;
+    border-radius: 30px;
+    font-size: 16px;
+    box-sizing: border-box;
+    outline: none;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+}
+
+input:focus, select:focus {
+    border-color: #a50b24;
+    background-color: #ffffff;
+    box-shadow: 0 0 8px rgba(197, 18, 48, 0.3); /* Subtle glow on focus */
+}
+
+label {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: white;
+    padding: 0 8px;
+    color: #555;
+    font-size: 16px;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+input:focus + label,
+input:valid + label,
+select:focus + label,
+select:valid + label {
+    top: -10px;
+    left: 15px;
+    font-size: 12px;
+    color: #a50b24;
+}
+
+/* Smaller and centralized select role */
+select {
+    width: 60%; /* Reduced width */
+    margin: 0 auto; /* Centered */
+}
+
+button {
+    padding: 14px;
+    background-color: #c41230;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background-color: #a50b24;
+    transform: translateY(-2px);
+    box-shadow: 0px 6px 20px rgba(197, 18, 48, 0.2); /* Button shadow on hover */
+}

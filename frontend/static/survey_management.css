@@ -1,0 +1,81 @@
+body {
+    background-color: #f1f1f1; /* Softer background */
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar Styling */
+.navbar {
+    background-color: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand img {
+    width: 70px;
+}
+
+/* Remove dropdown arrow */
+.dropdown-toggle::after {
+    display: none; /* Removes the down arrow */
+}
+
+/* Card Container */
+.card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Card Styling */
+.card {
+    width: 350px;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card i {
+    font-size: 48px;
+    color: #c41230; /* Fujairah Municipality red */
+    margin-bottom: 20px;
+}
+
+/* Button Styling */
+.btn-custom {
+    background-color: #c41230;
+    color: white;
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    margin-top: 15px;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-custom:hover {
+    background-color: #a50b24;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(197, 18, 48, 0.2);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .card {
+        width: 90%;
+    }
+
+    .navbar-brand img {
+        width: 60px;
+    }
+}

@@ -1,0 +1,137 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e9a3a3; /* Light background */
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 8px;
+    color: #333; /* Darker text for readability */
+}
+
+input[type="text"], textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px; /* Softer corners for inputs */
+    background-color: #fafafa;
+}
+
+button {
+    padding: 10px 15px;
+    background-color: #FF6B6B; /* Consistent red color */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+button[type="submit"] {
+    background-color: #FF4757; /* Another shade of red for submit buttons */
+}
+
+button:hover {
+    background-color: #e64e4e; /* Darker hover effect */
+}
+
+#questionsContainer h2 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.question-block {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    position: relative;
+    padding-top: 35px;
+}
+
+.remove-question-btn {
+    background: none;
+    color: #FF4757; /* Consistent red for delete buttons */
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.remove-question-btn:hover {
+    background-color: rgba(197, 193, 193, 0.767);
+}
+
+.remove-option-btn {
+    background: none;
+    border: none;
+    color: #FF4757; /* Consistent red for remove option */
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.remove-option-btn:hover {
+    background-color: rgba(197, 193, 193, 0.767);
+}
+
+.question-block {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.option-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.option-wrapper input[type='text'] {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.textarea-wrapper {
+    display: flex;
+    align-items: flex-start;
+    margin-top: 10px;
+}
+
+.textarea-wrapper textarea {
+    flex-grow: 1;
+    margin-right: 10px;
+}

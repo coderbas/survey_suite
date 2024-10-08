@@ -1,0 +1,58 @@
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar Styling */
+.navbar {
+    background-color: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand img {
+    width: 70px;
+}
+
+/* Help Subdivisions */
+.section {
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.section h4 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #c41230;
+}
+
+.help-item {
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.help-item:last-child {
+    border-bottom: none;
+}
+
+.help-item p {
+    margin: 5px 0;
+    color: #333;
+    font-size: 14px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .section {
+        padding: 15px;
+    }
+
+    .navbar-brand img {
+        width: 60px;
+    }
+}

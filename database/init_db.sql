@@ -28,34 +28,40 @@ CREATE TABLE Dashboard (
     FOREIGN KEY (UserID) REFERENCES User(UserID)
 );
 
+CREATE TABLE Response (
+    response_id INT AUTO_INCREMENT PRIMARY KEY,
+    survey_id INT NOT NULL,
+    respondent_id INT NOT NULL,
+    submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_response_survey FOREIGN KEY (survey_id) REFERENCES Survey(survey_id) ON DELETE CASCADE,
+    CONSTRAINT fk_respondent FOREIGN KEY (respondent_id) REFERENCES Users(user_id) ON DELETE CASCADE
+);
+
 CREATE TABLE Survey (
-    SurveyID INT AUTO_INCREMENT PRIMARY KEY,
-    Title VARCHAR(255) NOT NULL,
-    Description TEXT,
-    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
-    Status ENUM('Active', 'Inactive', 'Draft') NOT NULL,
-    CreatedBy INT,
-    FOREIGN KEY (CreatedBy) REFERENCES User(UserID)
+    survey_id INT AUTO_INCREMENT PRIMARY KEY,
+    creator_id INT NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_creator FOREIGN KEY (creator_id) REFERENCES Users(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE Question (
-    QuestionID INT AUTO_INCREMENT PRIMARY KEY,
-    SurveyID INT NOT NULL,
-    QuestionType ENUM('Text', 'Multiple Choice', 'Checkbox', 'Dropdown', 'Rating') NOT NULL,
-    QuestionText TEXT NOT NULL,
-    Options JSON,
-    FOREIGN KEY (SurveyID) REFERENCES Survey(SurveyID)
+    question_id INT AUTO_INCREMENT PRIMARY KEY,
+    survey_id INT NOT NULL,
+    question_text TEXT NOT NULL,
+    question_type VARCHAR(50) NOT NULL,
+    CONSTRAINT fk_survey FOREIGN KEY (survey_id) REFERENCES Survey(survey_id) ON DELETE CASCADE
 );
 
-CREATE TABLE Response (
-    ResponseID INT AUTO_INCREMENT PRIMARY KEY,
-    SurveyID INT NOT NULL,
-    UserID INT,
-    Answer JSON,
-    SubmissionDate DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (SurveyID) REFERENCES Survey(SurveyID),
-    FOREIGN KEY (UserID) REFERENCES User(UserID)
+CREATE TABLE QuestionOption (
+    option_id INT AUTO_INCREMENT PRIMARY KEY,
+    question_id INT NOT NULL,
+    option_text VARCHAR(255) NOT NULL,
+    CONSTRAINT fk_question FOREIGN KEY (question_id) REFERENCES Question(question_id) ON DELETE CASCADE
 );
+
+
 
 CREATE TABLE Template (
     TemplateID INT AUTO_INCREMENT PRIMARY KEY,
@@ -79,4 +85,13 @@ CREATE TABLE API (
     Endpoint VARCHAR(255) NOT NULL,
     Description TEXT,
     Method ENUM('GET', 'POST', 'PUT', 'DELETE') NOT NULL
+);
+
+CREATE TABLE Answer (
+    answer_id INT AUTO_INCREMENT PRIMARY KEY,
+    response_id INT NOT NULL,
+    question_id INT NOT NULL,
+    answer_text TEXT NOT NULL, -- Can store either text or selected option IDs
+    CONSTRAINT fk_answer_response FOREIGN KEY (response_id) REFERENCES Response(response_id) ON DELETE CASCADE,
+    CONSTRAINT fk_answer_question FOREIGN KEY (question_id) REFERENCES Question(question_id) ON DELETE CASCADE
 );

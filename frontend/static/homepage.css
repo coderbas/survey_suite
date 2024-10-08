@@ -1,0 +1,99 @@
+    /* General Styling */
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #fff; /* Removed the gradient background and set it to white */
+        color: #333;
+        margin: 0;
+    }
+
+    /* Navbar Styling */
+    .navbar {
+        background-color: #fff;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-brand img {
+        width: 70px;
+    }
+
+    /* Dropdown Styling */
+    .dropdown-menu {
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    .dropdown-item:hover {
+        background-color: #dc3545;
+        color: #fff;
+    }
+
+    .dropdown-toggle::after {
+        display: none; /* Removes the dropdown arrow */
+    }
+
+    /* Search Bar */
+    .input-group {
+        margin-top: 30px;
+    }
+
+    .input-group .form-control {
+        border: 2px solid #ddd;
+        border-radius: 50px 0 0 50px; /* Rounded only on the left */
+        padding: 10px 20px;
+        height: 50px; /* Ensures consistent height with the button */
+    }
+
+    .input-group .btn {
+        background-color: #ffffff;
+        border: 2px solid #ddd;
+        border-left: 0; /* Ensures button connects with input */
+        border-radius: 0 50px 50px 0; /* Rounded only on the right */
+        padding: 10px 20px;
+        height: 50px; /* Ensures the same height */
+        transition: all 0.3s ease;
+    }
+
+    .input-group .btn:hover {
+        background-color: #dc3545;
+        color: white;
+        box-shadow: 0 8px 15px rgba(220, 53, 69, 0.3);
+    }
+
+    /* Card Styles with 3D effect */
+    .card {
+        border: none;
+        border-radius: 15px;
+        background: #ffffff;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Subtle 3D effect */
+    }
+
+    .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2); /* Stronger 3D lift */
+        background-color: #cfe2ff; /* Updated hover color for better contrast */
+    }
+
+    .card-body i {
+        color: #dc3545; /* Red icon color to match brand */
+    }
+
+    .card-title {
+        font-weight: 600;
+        font-size: 1.25rem;
+    }
+
+    /* Profile Avatar */
+    .navbar .rounded-circle {
+        width: 40px;
+        height: 40px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adding a shadow to the avatar */
+    }
+
+    /* 3D button hover effect */
+    .btn:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    }
+

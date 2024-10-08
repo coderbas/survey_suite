@@ -1,0 +1,136 @@
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4; /* Subtle background for contrast */
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+            text-align: center;
+            width: 350px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #c41230;
+            font-weight: 600;
+            font-size: 24px;
+        }
+
+        .logo {
+            width: 100px;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .input-container {
+            position: relative;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid #c41230;
+            border-radius: 30px;
+            font-size: 16px;
+            box-sizing: border-box;
+            outline: none;
+            transition: all 0.3s ease; /* Smooth transition for focus */
+            background-color: #f9f9f9;
+        }
+
+        input:focus {
+            border-color: #a50b24;
+            background-color: #ffffff;
+            box-shadow: 0 0 8px rgba(197, 18, 48, 0.2); /* Subtle glow on focus */
+        }
+
+        label {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: white;
+            padding: 0 8px;
+            color: #555;
+            font-size: 16px;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        input:focus + label,
+        input:valid + label {
+            top: -12px;
+            left: 15px;
+            font-size: 12px;
+            color: #a50b24;
+        }
+
+        button {
+            padding: 14px;
+            background-color: #c41230;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #a50b24;
+            transform: translateY(-2px); /* Slight lift on hover */
+        }
+
+        .social-login {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .social-login i {
+            font-size: 30px;
+            color: #555;
+            cursor: pointer;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .social-login i:hover {
+            color: #c41230;
+            transform: scale(1.2); /* Slightly enlarge on hover */
+        }
+
+        .secondary-button {
+            background-color: transparent;
+            color: #c41230;
+            border: 2px solid #c41230;
+            border-radius: 30px;
+            padding: 12px;
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .secondary-button:hover {
+            background-color: #c41230;
+            color: #fff;
+        }
+
