@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قائمة الاستبيانات</title>
+    <!-- Bootstrap and Font Awesome CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='survey_list.css') }}">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Add RTL support -->
+    <style>
+        body {
+            direction: rtl;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+   <!-- Navigation Bar -->
+   <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <!-- Sidebar Dropdown -->
+        <div class="navbar-nav">
+            <div class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-bars"></i>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="{{ url_for('routes.dashboard') }}">الرئيسية</a></li>
+                    <li><a class="dropdown-item" href="#">الملف الشخصي</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('routes.settings') }}">الإعدادات</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{{ url_for('routes.logout') }}">تسجيل الخروج</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Brand Logo -->
+        <a class="navbar-brand mx-auto" href="{{ url_for('routes.home_page') }}">
+            <img src="{{ url_for('static', filename='fj_logo.jpeg') }}" alt="الشعار" style="width: 70px;">
+        </a>
+
+        <!-- User Profile Icon and Name -->
+        <div class="d-flex flex-column align-items-center">
+            <img src="{{ url_for('static', filename='person.svg') }}" alt="الصورة الرمزية للمستخدم" class="rounded-circle" style="width: 60px; height: 60px; object-fit: cover;">
+            <p class="mt-2"><strong>{{ user.name }}</strong></p>
+        </div>
+    </div>
+</nav>
+
+  <!-- Title Section -->
+  <div class="container text-center mt-4">
+    <h1 class="display-4">قائمة الاستبيانات</h1>
+  </div>
+
+  <!-- Search Bar Section -->
+  <div class="container my-3">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="input-group mt-3"> <!-- Added 'mt-3' to add margin to the top -->
+                <input type="text" class="form-control rounded-pill" placeholder="ابحث عن الاستبيانات...">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary rounded-pill ml-2" type="button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <!-- Survey List -->
+  <div class="container mt-4 survey-container">
+    <div class="row">
+        <!-- Survey Cards -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <img src="{{ url_for('static', filename='Crime.jpg') }}" class="card-img-top" alt="استبيان منع الجريمة">
+                <div class="card-body">
+                    <h5 class="card-title">استبيان منع الجريمة</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <img src="{{ url_for('static', filename='fj_tourism.jpg') }}" class="card-img-top" alt="استبيان تجربة السياحة وتحسينها">
+                <div class="card-body">
+                    <h5 class="card-title">استبيان تجربة السياحة</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <img src="{{ url_for('static', filename='brt.jpg') }}" class="card-img-top" alt="استبيان رضا الخدمات العامة في الفجيرة">
+                <div class="card-body">
+                    <h5 class="card-title">استبيان رضا الخدمات العامة في الفجيرة</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

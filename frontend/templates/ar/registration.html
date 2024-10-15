@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='registration.css') }}">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مجموعة الاستبيانات - تسجيل المستخدم</title>
+
+    <!-- Add RTL support -->
+    <style>
+        body {
+            direction: rtl;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>تسجيل المستخدم</h1>
+        <img src="{{ url_for('static', filename='fj_logo.jpeg') }}" alt="الشعار">
+
+        <!-- Flash Messages Section -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div>
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <form action="/register" method="POST" id="registrationForm">
+            <div class="input-container">
+                <input type="text" id="name" name="name" required>
+                <label for="name">الاسم</label>
+            </div>
+            <div class="input-container">
+                <input type="text" id="telephone" name="telephone" required>
+                <label for="telephone">رقم الهاتف</label>
+            </div>
+            <div class="input-container">
+                <input type="email" id="email" name="email" required>
+                <label for="email">البريد الإلكتروني</label>
+            </div>
+            <div class="input-container">
+                <input type="password" id="password" name="password" required>
+                <label for="password">كلمة المرور</label>
+            </div>
+            <div class="input-container">
+                <input type="password" id="confirm_password" name="confirm_password" required>
+                <label for="confirm_password">تأكيد كلمة المرور</label>
+            </div>
+            <div class="input-container">
+                <select id="role" name="role" required>
+                    <option value="" disabled selected>اختر الدور</option>
+                    {% for role in roles %}
+                        <option value="{{ role.RoleID }}">{{ role.RoleName }}</option>
+                    {% endfor %}
+                </select>
+                <label for="role">الدور</label>
+            </div>
+            
+            <button type="submit">تسجيل</button>
+        </form>
+    </div>
+
+    <script>
+        // Password match validation
+        const form = document.getElementById('registrationForm');
+        form.addEventListener('submit', function(event) {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+
+            if (password !== confirmPassword) {
+                event.preventDefault();
+                alert('كلمتا المرور غير متطابقتين!');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,61 +1,86 @@
+body {
+    font-family: 'Nunito', sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background: linear-gradient(to bottom right, #f0f0f0, #ffffff); /* Adds a soft gradient for a clean look */
+}
 
-        body {
-            font-family: 'Nunito', sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background: linear-gradient(to bottom right, #f0f0f0, #ffffff); /* Adds a soft gradient for a clean look */
-        }
+h1 {
+    margin-bottom: 15px;
+    font-weight: 600;
+    color: #c41230; /* Keep the brand color consistent */
+    font-size: 2.5em;
+}
 
-        h1 {
-            margin-bottom: 15px;
-            font-weight: 600;
-            color: #c41230; /* Keep the brand color consistent */
-            font-size: 2.5em; /* Larger and more striking title */
-        }
+.logo img {
+    max-width: 150px;
+    margin-bottom: 15px;
+    animation: fadeIn 1s ease; /* Smooth animation */
+}
 
-        .logo img {
-            max-width: 150px;
-            margin-bottom: 15px;
-            animation: fadeIn 1s ease; /* Smooth animation */
-        }
+.motto {
+    font-size: 1.3em;
+    margin-bottom: 30px;
+    color: #555;
+    font-style: italic;
+    text-align: center;
+}
 
-        .motto {
-            font-size: 1.3em;
-            margin-bottom: 30px;
-            color: #555; /* Softer text color for secondary elements */
-            font-style: italic;
-        }
+.language-selection {
+    display: inline-block;
+    margin-bottom: 30px;
+}
 
-        .container button {
-            background-color: #c41230;
-            color: white;
-            font-size: 1.5em;
-            padding: 15px 40px;
-            border: none;
-            border-radius: 50px; /* More rounded button for a modern look */
-            cursor: pointer;
-            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1); /* Adds depth to the button */
-            transition: all 0.3s ease; /* Smooth hover transition */
-        }
+.lang-btn {
+    text-decoration: none;
+    padding: 10px 20px;
+    border: 2px solid #c41230;
+    border-radius: 25px;
+    margin: 0 10px;
+    font-size: 1.2em;
+    color: #c41230;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
 
-        .container button:hover {
-            background-color: #a50b24; /* Slightly darker on hover */
-            transform: translateY(-3px); /* Adds a lift effect on hover */
-            box-shadow: 0px 12px 20px rgba(0, 0, 0, 0.2); /* Enhances shadow on hover */
-        }
+.lang-btn:hover {
+    background-color: #c41230;
+    color: white;
+}
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-  
+.lang-btn.selected {
+    background-color: #c41230;
+    color: white;
+}
+
+.container button {
+    background-color: #c41230;
+    color: white;
+    font-size: 1.5em;
+    padding: 15px 40px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.container button:hover {
+    background-color: #a50b24;
+    transform: translateY(-3px);
+    box-shadow: 0px 12px 20px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

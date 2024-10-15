@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الاستبيان</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='survey_management.css') }}">
+
+    <!-- Add RTL support -->
+    <style>
+        body {
+            direction: rtl;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+       <!-- Navigation Bar -->
+       <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <!-- Sidebar Dropdown -->
+            <div class="navbar-nav">
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-bars"></i>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{{ url_for('routes.dashboard') }}">الرئيسية</a></li>
+                        <li><a class="dropdown-item" href="#">الملف الشخصي</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('routes.settings') }}">الإعدادات</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{{ url_for('routes.logout') }}">تسجيل الخروج</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Brand Logo -->
+            <a class="navbar-brand mx-auto" href="{{ url_for('routes.home_page') }}">
+                <img src="{{ url_for('static', filename='fj_logo.jpeg') }}" alt="الشعار" style="width: 70px;">
+            </a>
+
+            <!-- User Profile Icon and Name -->
+            <div class="d-flex flex-column align-items-center">
+                <img src="{{ url_for('static', filename='person.svg') }}" alt="الصورة الرمزية للمستخدم" class="rounded-circle" style="width: 60px; height: 60px; object-fit: cover;">
+                <p class="mt-2"><strong>{{ user.name }}</strong></p>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Card Container -->
+    <div class="card-container">
+        <div class="card">
+            <i class="fas fa-poll"></i> <!-- Changed to a modern poll icon -->
+            <a href="{{ url_for('routes.create_surv') }}" class="btn btn-custom">إنشاء استبيان</a>
+            <a href="{{ url_for('routes.survey_list') }}" class="btn btn-custom">قائمة الاستبيانات</a>
+            <button class="btn btn-custom">الاستبيانات المحذوفة</button>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

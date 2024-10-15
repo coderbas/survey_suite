@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إنشاء استبيان</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='create_survey.css') }}">
+
+    <!-- Add RTL support -->
+    <style>
+        body {
+            direction: rtl;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>إنشاء استبيان</h1>
+        <form action="/create-survey" method="POST" id="surveyForm">
+            <div class="form-group">
+                <label for="surveyTitle">عنوان الاستبيان</label>
+                <input type="text" id="surveyTitle" name="surveyTitle" required>
+            </div>
+
+            <div class="form-group">
+                <label for="surveyDescription">وصف الاستبيان</label>
+                <textarea id="surveyDescription" name="surveyDescription" rows="3" required></textarea>
+            </div>
+
+            <div id="questionsContainer">
+                <h2>الأسئلة</h2>
+            </div>
+
+            <button type="button" id="addQuestionButton">إضافة سؤال</button>
+            <button type="submit">إنشاء استبيان</button>
+        </form>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

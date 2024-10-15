@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ survey.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='view_survey_styles.css') }}">
+
+    <!-- Add RTL support -->
+    <style>
+        body {
+            direction: rtl;
+            text-align: right;
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="container">
+     <!-- Fujairah Municipality Logo -->
+     <div class="logo">
+        <img src="{{ url_for('static', filename='fj_logo.jpeg') }}" alt="شعار بلدية الفجيرة">
+    </div>
+    <h1>{{ survey.title }}</h1>
+    <p>{{ survey.description }}</p>
+
+    <form action="/submit-survey/{{ survey.survey_id }}" method="POST">
+        {% for item in questions_with_options %}
+            <div class="form-group">
+                <h3>{{ item.question.question_text }}</h3>
+
+                {% if item.question.question_type == 'singleChoice' %}
+                    {% for option in item.options %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="question_{{ item.question.question_id }}" value="{{ option.option_text }}">
+                            <label class="form-check-label">{{ option.option_text }}</label>
+                        </div>
+                    {% endfor %}
+                {% elif item.question.question_type == 'multipleChoice' %}
+                    {% for option in item.options %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="question_{{ item.question.question_id }}" value="{{ option.option_text }}">
+                            <label class="form-check-label">{{ option.option_text }}</label>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <input type="text" class="form-control" name="question_{{ item.question.question_id }}" placeholder="إجابتك">
+                {% endif %}
+                <br>
+            </div>
+        {% endfor %}
+        <!-- <button type="submit" class="btn btn-primary">إرسال الاستبيان</button> -->
+    </form>
+
+    <!-- Button to generate and share the survey link -->
+    <button id="shareButton" class="btn btn-primary">مشاركة الاستبيان</button>
+
+    <!-- Area to display the generated shareable link -->
+    <div id="shareLinkContainer" style="display: none;">
+        <p>شارك هذا الرابط:</p>
+        <input type="text" id="shareLink" class="form-control" readonly>
+        <button onclick="copyLink()" class="btn btn-secondary" style="margin-top: 10px;">نسخ الرابط</button>
+    </div>
+
+</div>
+
+<script>
+    // Function to generate the shareable link
+    document.getElementById('shareButton').addEventListener('click', function() {
+        const surveyId = "{{ survey.survey_id }}";  // Surround survey_id with quotes to avoid the error
+        const shareLink = window.location.origin + '/fill-survey/' + surveyId;
+
+        // Display the shareable link
+        document.getElementById('shareLink').value = shareLink;
+        document.getElementById('shareLinkContainer').style.display = 'block';
+    });
+
+    // Function to copy the link to the clipboard
+    function copyLink() {
+        const copyText = document.getElementById("shareLink");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); // For mobile devices
+        document.execCommand("copy");
+        alert("تم نسخ الرابط إلى الحافظة!");
+    }
+</script>
+
+</body>
+</html>

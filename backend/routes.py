@@ -1,8 +1,8 @@
 from flask import Blueprint, request, jsonify, redirect, url_for, session, render_template, flash
-from models import  Role,User, Survey, Question, Option, Response, Answer,db
+from models import Role, User, Survey, Question, Option, Response, Answer, db
 from __init__ import db
 from sqlalchemy.exc import IntegrityError
-from werkzeug.security import generate_password_hash , check_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 import logging
 import uuid
 
@@ -13,19 +13,43 @@ def setup_routes(app):
     # Register the Blueprint with the app
     app.register_blueprint(routes)
 
-# Serve the homepage
+
+@routes.route('/set-language/<lang>')
+def set_language(lang):
+    # Store the selected language in session
+    session['lang'] = lang
+    return redirect(url_for('routes.home_page'))  # Redirect to the updated home_page
+
+
+# Use this function to serve both English and Arabic home pages
+@routes.route('/home', endpoint='home_page')
+def home_page():
+    lang = session.get('lang', 'en')  # Default to English if no language is selected
+    if lang == 'ar':
+        return render_template('ar/home.html')  # Serve Arabic version
+    return render_template('home.html')  # Serve English version
+
+
+# Serve the homepage (rename the function here to avoid conflict)
 @routes.route('/')
-def home():
+def home_default():
     return render_template('index.html')  # Use render_template for serving HTML
 
 
 
 @routes.route('/register', methods=['GET', 'POST'])
 def register():
+    # Determine the language from the session (default to English)
+    lang = session.get('lang', 'en')
+    
     if request.method == 'GET':
         roles = Role.query.all()
+
+        # Serve the appropriate registration template based on language
+        if lang == 'ar':
+            return render_template('ar/registration.html', roles=roles)
         return render_template('registration.html', roles=roles)
-    
+
     if request.method == 'POST':
         name = request.form.get('name')
         phone_number = request.form.get('telephone')
@@ -34,28 +58,45 @@ def register():
         role_id = request.form.get('role')
 
         if not role_id:
-            flash('Role is required!', 'danger')  # Flashing error message with 'danger' class
+            if lang == 'ar':
+                flash('الدور مطلوب!', 'danger')  # Arabic flash message for missing role
+            else:
+                flash('Role is required!', 'danger')  # English flash message for missing role
             return redirect(url_for('routes.register'))
 
         hashed_password = generate_password_hash(password)
-        
         new_user = User(name=name, PhoneNumber=phone_number, EmailAddress=email_address, password=hashed_password, RoleID=role_id)
 
         try:
             db.session.add(new_user)
             db.session.commit()
-            flash('Registration successful. Please log in.', 'success')  # Flashing success message
-            return redirect(url_for('routes.login'))
-        except IntegrityError:
-            db.session.rollback()  # Rollback the session to prevent any partial commit
-            flash('This email address is already registered. Please use a different email.', 'danger')
-            return redirect(url_for('routes.register'))  # Stay on the registration page
 
+            # Flash success message based on language
+            if lang == 'ar':
+                flash('تم التسجيل بنجاح. يرجى تسجيل الدخول.', 'success')  # Arabic success message
+            else:
+                flash('Registration successful. Please log in.', 'success')  # English success message
+            return redirect(url_for('routes.login'))
+
+        except IntegrityError:
+            db.session.rollback()
+
+            # Flash error message based on language for duplicate email
+            if lang == 'ar':
+                flash('هذا البريد الإلكتروني مسجل بالفعل. الرجاء استخدام بريد إلكتروني آخر.', 'danger')  # Arabic message
+            else:
+                flash('This email address is already registered. Please use a different email.', 'danger')  # English message
+            return redirect(url_for('routes.register'))
 
 
 @routes.route('/login', methods=['GET', 'POST'])
 def login():
+    lang = session.get('lang', 'en')  # Default to English
+
     if request.method == 'GET':
+        # Render either Arabic or English login template
+        if lang == 'ar':
+            return render_template('ar/login.html')
         return render_template('login.html')
     
     if request.method == 'POST':
@@ -68,28 +109,34 @@ def login():
             session['user_id'] = user.UserID
             return redirect(url_for('routes.dashboard'))
         else:
-            flash('Invalid credentials')
+            flash('Invalid credentials' if lang == 'en' else 'بيانات الاعتماد غير صحيحة')
             return redirect(url_for('routes.login'))
 
-# Serve the homepage dashboard
 @routes.route('/dashboard')
 def dashboard():
     if 'user_id' not in session:
         return redirect(url_for('routes.login'))
 
-    # Fetch user info from session or database
+    lang = session.get('lang', 'en')
     user = User.query.get(session['user_id'])
+
+    # Render the homepage based on the selected language
+    if lang == 'ar':
+        return render_template('ar/homepage.html', user=user)
     return render_template('homepage.html', user=user)
 
 @routes.route('/admin_dashboard')
 def admin_dashboard():
     if 'user_id' not in session:
         return redirect(url_for('routes.login'))
-     # Fetch user info from session or database
+
+    lang = session.get('lang', 'en')
     user = User.query.get(session['user_id'])
+
+    # Render the admin dashboard based on the selected language
+    if lang == 'ar':
+        return render_template('ar/admin.html', user=user)
     return render_template('admin.html', user=user)
-
-
 # Serve other routes like surveys, stats, etc.
 @routes.route('/survey', methods=['GET'])
 def list_surveys():
@@ -100,18 +147,24 @@ def list_surveys():
 def survey_management():
     if 'user_id' not in session:
         return redirect(url_for('routes.login'))
-     # Fetch user info from session or database
-    user = User.query.get(session['user_id'])
-    return render_template('survey_management.html', user=user)
 
+    lang = session.get('lang', 'en')
+    user = User.query.get(session['user_id'])
+
+    if lang == 'ar':
+        return render_template('ar/survey_management.html', user=user)
+    return render_template('survey_management.html', user=user)
 
 @routes.route('/create_surv')
 def create_surv():
     if 'user_id' not in session:
         return redirect(url_for('routes.login'))
-    
-     # Fetch user info from session or database
+
+    lang = session.get('lang', 'en')
     user = User.query.get(session['user_id'])
+
+    if lang == 'ar':
+        return render_template('ar/create_survey.html', user=user)
     return render_template('create_survey.html', user=user)
 ########
 # Route to handle survey creation
@@ -245,49 +298,63 @@ def submit_survey(survey_id):
 def survey_list():
     if 'user_id' not in session:
         return redirect(url_for('routes.login'))
-     # Fetch user info from session or database
+
+    lang = session.get('lang', 'en')
     user = User.query.get(session['user_id'])
+
+    if lang == 'ar':
+        return render_template('ar/survey_list.html', user=user)
     return render_template('survey_list.html', user=user)
-    
 
 @routes.route('/user_management')
 def user_management():
     if 'user_id' not in session:
         return redirect(url_for('routes.login'))
-     # Fetch user info from session or database
+
+    lang = session.get('lang', 'en')
     user = User.query.get(session['user_id'])
+
+    if lang == 'ar':
+        return render_template('ar/user_management_page.html', user=user)
     return render_template('user_management_page.html', user=user)
 
 @routes.route('/analytics')
 def analytics():
     if 'user_id' not in session:
         return redirect(url_for('routes.login'))
-     # Fetch user info from session or database
+
+    lang = session.get('lang', 'en')
     user = User.query.get(session['user_id'])
+
+    if lang == 'ar':
+        return render_template('ar/homepage.html', user=user)
     return render_template('homepage.html', user=user)
 
 @routes.route('/settings')
 def settings():
     if 'user_id' not in session:
         return redirect(url_for('routes.login'))
-    
- # Fetch user info from session or database
+
+    lang = session.get('lang', 'en')
     user = User.query.get(session['user_id'])
+
+    if lang == 'ar':
+        return render_template('ar/settings.html', user=user)
     return render_template('settings.html', user=user)
 
 @routes.route('/help_support')
 def help_support():
     if 'user_id' not in session:
         return redirect(url_for('routes.login'))
-    
-     # Fetch user info from session or database
-    user = User.query.get(session['user_id'])
-    return render_template('help.html', user=user)
 
+    lang = session.get('lang', 'en')
+    user = User.query.get(session['user_id'])
+
+    if lang == 'ar':
+        return render_template('ar/help.html', user=user)
+    return render_template('help.html', user=user)
 
 @routes.route('/logout')
 def logout():
-    # Clear the session data
     session.pop('user_id', None)
-    # Redirect to the login page after logout
     return redirect(url_for('routes.login'))

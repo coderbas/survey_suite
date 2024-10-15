@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+
+    <title>مجموعة الاستبيانات</title>
+
+    <!-- Add RTL support -->
+    <style>
+        body {
+            direction: rtl;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <h1>مجموعة الاستبيانات</h1>
+    <div class="logo">
+        <img src="{{ url_for('static', filename='fj_logo.jpeg') }}" alt="شعار الفجيرة">
+    </div>
+    <div class="motto">
+        <p>...تمكين القرارات بالبيانات</p>
+    </div>
+    <div class="container">
+        <form action="/login" method="get">
+            <button type="submit">متابعة</button>
+        </form>
+    </div>
+</body>
+</html>

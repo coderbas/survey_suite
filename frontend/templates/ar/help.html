@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المساعدة والدعم - مجموعة الاستبيانات</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Google Fonts for Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='help.css') }}">
+
+    <!-- Add RTL support -->
+    <style>
+        body {
+            direction: rtl;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand mx-auto" href="#">
+                <img src="{{ url_for('static', filename='fj_logo.jpeg') }}" alt="الشعار">
+            </a>
+        </div>
+    </nav>
+
+    <!-- Help and Support Page -->
+    <div class="container my-4">
+        <h2 class="text-center mb-4">المساعدة والدعم</h2>
+        
+        <!-- FAQ Section -->
+        <div class="section">
+            <h4>الأسئلة المتكررة</h4>
+            <div class="help-item">
+                <p><strong>س1:</strong> كيف يمكنني إعادة تعيين كلمة المرور الخاصة بي؟</p>
+                <p><strong>ج:</strong> اذهب إلى إعدادات الحساب واضغط على "تغيير كلمة المرور".</p>
+            </div>
+            <div class="help-item">
+                <p><strong>س2:</strong> كيف يمكنني الاتصال بالدعم؟</p>
+                <p><strong>ج:</strong> استخدم نموذج الاتصال أو اتصل برقم مركز الدعم.</p>
+            </div>
+        </div>
+
+        <!-- Support Center Section -->
+        <div class="section">
+            <h4>مركز الدعم</h4>
+            <div class="help-item">
+                <p>الهاتف: +971-XXX-XXXX</p>
+                <p>البريد الإلكتروني: support@surveysuite.com</p>
+            </div>
+        </div>
+
+        <!-- Contact Us Section -->
+        <div class="section">
+            <h4>اتصل بنا</h4>
+            <div class="help-item">
+                <p>هل لديك سؤال؟ تواصل مع فريق الدعم للحصول على المساعدة.</p>
+                <button class="btn btn-primary">اتصل بالدعم</button>
+            </div>
+        </div>
+
+        <!-- User Guides Section -->
+        <div class="section">
+            <h4>أدلة المستخدم</h4>
+            <div class="help-item">
+                <p>قم بتنزيل أدلة المستخدم الشاملة الخاصة بنا لبدء الاستخدام.</p>
+                <button class="btn btn-primary">تحميل الدليل</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
