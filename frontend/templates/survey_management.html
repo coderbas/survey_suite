@@ -32,14 +32,14 @@
             </div>
 
             <!-- Brand Logo -->
-            <a class="navbar-brand mx-auto" href="{{ url_for('routes.home') }}">
+            <a class="navbar-brand mx-auto" href="{{ url_for('routes.home_page') }}">
                 <img src="{{ url_for('static', filename='fj_logo.jpeg') }}" alt="Logo" style="width: 70px;">
             </a>
 
             <!-- User Profile Icon and Name -->
-            <div class="d-flex flex-column align-items-center">
-                <img src="{{ url_for('static', filename='person.svg') }}" alt="User Avatar" class="rounded-circle" style="width: 60px; height: 60px; object-fit: cover;">
-                <p class="mt-2"><strong>{{ user.name }}</strong></p>
+            <div class="d-flex align-items-center">
+                <img src="{{ url_for('static', filename='person.svg') }}" alt="User Avatar" class="rounded-circle" style="width: 40px; height: 40px;">
+                <span class="ms-2">{{ user.name_en }}</span>
             </div>
 
 
@@ -51,7 +51,7 @@
         <div class="card">
             <i class="fas fa-poll"></i> <!-- Changed to a modern poll icon -->
             <a href="{{ url_for('routes.create_surv') }}" class="btn btn-custom">Create Survey</a>
-            <a href="{{ url_for('routes.survey_list') }}" class="btn btn-custom">Survey List</a>
+            <a href="{{ url_for('routes.surveys') }}" class="btn btn-custom">Survey List</a>
             <button class="btn btn-custom">Deleted Surveys</button>
         </div>
     </div>

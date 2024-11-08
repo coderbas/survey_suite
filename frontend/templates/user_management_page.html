@@ -7,70 +7,82 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='user_management_page.css') }}">
-   
-      </head>
-      <body>
-        <!-- Header Section -->
-        <div class="header">
-          <div class="menu-icon">
-            <span class="bi bi-list"></span>
+  </head>
+  
+  <body>
+    <div class="container mt-3">
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="alert alert-warning">
+            {% for message in messages %}
+              {{ message }}
+            {% endfor %}
           </div>
-          <h1>User Management</h1>
-          <img src="{{ url_for('static', filename='person.svg') }}" alt="User Avatar" class="avatar">
-        </div>
-    
-        <!-- Search Bar -->
-        <div class="search-container">
-          <input type="text" placeholder="Search users..." class="search-bar">
-          <span class="search-icon bi bi-search"></span>
-        </div>
-    
-        <!-- User Profiles Section -->
-        <div class="profiles-container">
-          <div class="profile-card">
-            <div class="profile-info">
-              <img src="{{ url_for('static', filename='person.svg') }}" alt="Logo" style="width: 70px;">
-              <div class="profile-text">
-                <span class="profile-name">John Doe</span>
-                <span class="profile-role">Administrator</span>
+        {% endif %}
+      {% endwith %}
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+          <div class="navbar-nav">
+              <div class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="fas fa-bars"></i>
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <li><a class="dropdown-item" href="{{ url_for('routes.dashboard') }}">Home</a></li>
+                      <li><a class="dropdown-item" href="#">Profile</a></li>
+                      <li><a class="dropdown-item" href="{{ url_for('routes.settings') }}">Settings</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item" href="{{ url_for('routes.logout') }}">Logout</a></li>
+                  </ul>
               </div>
-            </div>
-            <div class="icons">
-              <span class="icon bi bi-pencil-square"></span>
-              <span class="icon bi bi-trash"></span>
-            </div>
-          </div>  
+          </div>
+
+          <a class="navbar-brand mx-auto" href="{{ url_for('routes.home_page') }}">
+              <img src="{{ url_for('static', filename='fj_logo.jpeg') }}" alt="Logo" style="width: 70px;">
+          </a>
+
+          <div class="d-flex flex-column align-items-center">
+              <img src="{{ url_for('static', filename='person.svg') }}" alt="User Avatar" class="rounded-circle" style="width: 60px; height: 60px;">
+              <p class="mt-2"><strong>{{ user.name }}</strong></p>
+          </div>
+      </div>
+  </nav>
+    <!-- Search Bar -->
+    <div class="search-container">
+      <form method="GET" action="{{ url_for('routes.user_management') }}">
+        <input type="text" name="search" placeholder="Search users..." class="form-control" value="{{ request.args.get('search', '') }}">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
     
-          <div class="profile-card">
-            <div class="profile-info">
-              <img src="{{ url_for('static', filename='person.svg') }}" alt="Profile Picture" class="profile-pic">
-              <div class="profile-text">
-                <span class="profile-name">Charles Son</span>
-                <span class="profile-role">Sub-admin</span>
-              </div>
-            </div>
-            <div class="icons">
-              <span class="icon bi bi-pencil-square"></span>
-              <span class="icon bi bi-trash"></span>
-            </div>
-          </div> 
-    
-          <div class="profile-card">
-            <div class="profile-info">
-              <img src="{{ url_for('static', filename='person.svg') }}" alt="Profile Picture" class="profile-pic">
-              <div class="profile-text">
-                <span class="profile-name">Paul Wagner</span>
-                <span class="profile-role">Sub-admin</span>
-              </div>
-            </div>
-            <div class="icons">
-              <span class="icon bi bi-pencil-square"></span>
-              <span class="icon bi bi-trash"></span>
+    </div>
+
+
+    <!-- User Profiles Section -->
+    <div class="profiles-container">
+      {% for user in users %}
+        <div class="profile-card">
+          <div class="profile-info">
+            <img src="{{ url_for('static', filename='person.svg') }}" alt="Profile Picture" style="width: 70px;">
+            <div class="profile-text">
+              <span class="profile-name">{{ user.name_en }}</span>  <!-- Display user's name -->
+              <span class="profile-role">{{ user.section }}</span>  <!-- Display user's role/section -->
             </div>
           </div>
+          <div class="icons">
+            <!-- Edit and Delete icons with functionality -->
+            <a href="{{ url_for('routes.edit_user', user_id=user.id) }}"><span class="icon bi bi-pencil-square"></span></a>
+            <form action="{{ url_for('routes.delete_user', user_id=user.id) }}" method="POST" style="display:inline;">
+              <button type="submit" class="icon bi bi-trash" style="border: none; background: none;"></button>
+            </form>
+          </div>
         </div>
-    
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-      </body>
-    </html>
+      {% endfor %}
+     
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

@@ -1,12 +1,9 @@
-from __init__ import app, db
-from routes import setup_routes
+# backend/app.py
 
-from routes import routes  # assuming 'routes' is your Blueprint object
+from backend import create_app, db  # Import the create_app function and db instance
 
-# Set up routes
-setup_routes(app)
-app.config['SECRET_KEY'] = 'Basit@2024'
-
+# Create the Flask application instance
+app = create_app()
 
 if __name__ == '__main__':
     app.run(debug=True)

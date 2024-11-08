@@ -28,20 +28,18 @@
         {% endif %}
         {% endwith %}
         <form action="/login" method="POST">
+           
             <div class="input-container">
-                <input type="text" id="username" name="username" required>
-                <label for="username">Username</label>
-            </div>
-            <div class="input-container">
-                <input type="text" id="telephone" name="telephone" required>
-                <label for="telephone">Telephone</label>
+                <input type="email" id="email_id" name="email_id" required>
+                <label for="email_id">Email</label>
             </div>
             <div class="input-container">
                 <input type="password" id="password" name="password" required>
                 <label for="password">Password</label>
             </div>
-            <button type="submit">Continue</button>
+            <button type="submit">Login</button>
         </form>
+        
         <form action="/register" method="get">
             <button type="submit" class="secondary-button">Don't have an account? Register here</button>
         </form>

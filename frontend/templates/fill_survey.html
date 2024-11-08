@@ -4,55 +4,90 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ survey.title }}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome for icons -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='fill_out.css') }}">
-
-
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .star-rating {
+            font-size: 2rem;
+            color: #d3d3d3;
+        }
+        .star-rating .checked {
+            color: #ffc107;
+        }
+    </style>
 </head>
 <body>
 
 <div class="container">
-    <!-- Fujairah Municipality Logo -->
-    <div class="logo">
-        <img src="{{ url_for('static', filename='fj_logo.jpeg') }}" alt="Fujairah Municipality Logo">
-    </div>
-
     <h1>{{ survey.title }}</h1>
     <p>{{ survey.description }}</p>
 
-    <form action="{{ url_for('routes.submit_survey', survey_id=survey.survey_id) }}" method="POST">
+    <form id="surveyForm" action="{{ url_for('routes.submit_survey', survey_id=survey.survey_id) }}" method="POST">
         {% for item in questions_with_options %}
-            <div class="form-group">
+            <div>
                 <h3>{{ item.question.question_text }}</h3>
 
                 {% if item.question.question_type == 'singleChoice' %}
                     {% for option in item.options %}
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="question_{{ item.question.question_id }}" value="{{ option.option_text }}">
-                            <label class="form-check-label">{{ option.option_text }}</label>
+                        <div>
+                            <input type="radio" name="question_{{ item.question.question_id }}" value="{{ option.option_text }}" required>
+                            <label>{{ option.option_text }}</label>
                         </div>
                     {% endfor %}
                 {% elif item.question.question_type == 'multipleChoice' %}
                     {% for option in item.options %}
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="question_{{ item.question.question_id }}" value="{{ option.option_text }}">
-                            <label class="form-check-label">{{ option.option_text }}</label>
+                        <div>
+                            <input type="checkbox" name="question_{{ item.question.question_id }}" value="{{ option.option_text }}" >
+                            <label>{{ option.option_text }}</label>
                         </div>
                     {% endfor %}
                 {% else %}
-                    <input type="text" class="form-control" name="question_{{ item.question.question_id }}" placeholder="Your answer">
+                    <input type="text" name="question_{{ item.question.question_id }}" placeholder="Your answer" required>
                 {% endif %}
-                <br>
             </div>
         {% endfor %}
+
+        <!-- Rating Section -->
+        <div class="rating-section mt-4">
+            <h4>Rate this survey</h4>
+            <div id="starRating" class="star-rating">
+                <span class="star" data-value="1">&#9733;</span>
+                <span class="star" data-value="2">&#9733;</span>
+                <span class="star" data-value="3">&#9733;</span>
+                <span class="star" data-value="4">&#9733;</span>
+                <span class="star" data-value="5">&#9733;</span>
+            </div>
+            <input type="hidden" name="survey_rating" id="surveyRating" value="0" required>
+        </div>
+
         <button type="submit" class="btn btn-primary">Submit Survey</button>
     </form>
-
 </div>
+
+<script>
+    // Star Rating JavaScript
+    const stars = document.querySelectorAll('.star');
+    const ratingInput = document.getElementById('surveyRating');
+
+    stars.forEach(star => {
+        star.addEventListener('click', () => {
+            const rating = star.getAttribute('data-value');
+            ratingInput.value = rating;
+            stars.forEach(s => s.classList.remove('checked'));
+            for (let i = 0; i < rating; i++) {
+                stars[i].classList.add('checked');
+            }
+        });
+    });
+
+    // Form validation to ensure a rating is selected
+    document.getElementById('surveyForm').addEventListener('submit', function(event) {
+        if (ratingInput.value === "0") {
+            alert("Please provide a rating for the survey.");
+            event.preventDefault(); // Prevent form submission
+        }
+    });
+</script>
 
 </body>
 </html>

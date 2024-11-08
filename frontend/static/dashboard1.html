@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Survey Suite Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2>Fujairah Survey Suite</h2>
+      <ul>
+        <li><i class="fas fa-home"></i> Dashboard</li>
+        <li><i class="fas fa-poll"></i> Surveys</li>
+        <li><i class="fas fa-users"></i> Users</li>
+        <li><i class="fas fa-chart-line"></i> Analytics</li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Header -->
+      <header class="dashboard-header">
+        <h1>Dashboard</h1>
+        <button class="btn primary-btn">Create New Survey</button>
+      </header>
+
+      <!-- Analytics Section -->
+      <section class="analytics-overview">
+        <div class="analytics-card">
+          <h3>Active Surveys</h3>
+          <p>25</p>
+        </div>
+        <div class="analytics-card">
+          <h3>Total Responses</h3>
+          <p>1,250</p>
+        </div>
+        <div class="analytics-card">
+          <h3>Users Engaged</h3>
+          <p>500</p>
+        </div>
+      </section>
+
+      <!-- Surveys Section -->
+      <section class="survey-list">
+        <div class="survey-card">
+          <h4>Customer Satisfaction Survey</h4>
+          <p>Responses: 150</p>
+          <button class="btn secondary-btn">View Survey</button>
+        </div>
+        <div class="survey-card">
+          <h4>Employee Feedback Survey</h4>
+          <p>Responses: 200</p>
+          <button class="btn secondary-btn">View Survey</button>
+        </div>
+        <!-- Additional survey cards as needed -->
+      </section>
+    </main>
+  </div>
+</body>
+</html>

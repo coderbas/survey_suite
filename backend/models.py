@@ -1,18 +1,25 @@
 import bcrypt
-from __init__ import db
+from backend import db
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
-class User(db.Model):
-    __tablename__ = 'user'
-    UserID = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(100), nullable=False)
-    EmailAddress = db.Column(db.String(100), unique=True, nullable=False)
-    PhoneNumber = db.Column(db.String(15), nullable=True)
-    password = db.Column(db.String(255), nullable=False)  # Password hash
-    RoleID = db.Column(db.Integer, db.ForeignKey('role.RoleID'), nullable=False)
 
-    role = db.relationship('Role', backref='users')
+
+
+
+
+
+class Users(db.Model):
+    __tablename__ = 'users'
+
+    id = db.Column(db.Integer, primary_key=True)
+    finance_no = db.Column(db.String(20), nullable=False)
+    name_ar = db.Column(db.String(100), nullable=False)
+    name_en = db.Column(db.String(100), nullable=False)
+    mobile_no = db.Column(db.String(20), nullable=False)
+    email_id = db.Column(db.String(100), unique=True, nullable=False)
+    hashed_password = db.Column(db.String(255), nullable=False)  # Ensure this field exists
+    section = db.Column(db.String(100), nullable=True)
 
 class Role(db.Model):
     __tablename__ = 'role'
@@ -22,10 +29,41 @@ class Role(db.Model):
 class Survey(db.Model):
     __tablename__ = 'survey'
     survey_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    creator_id = db.Column(db.Integer, db.ForeignKey('user.UserID'), nullable=False)
+    creator_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)  # Updated ForeignKey
     title = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    start_date = db.Column(db.DateTime, nullable=True)  # New field for survey start date
+    end_date = db.Column(db.DateTime, nullable=True)    # New field for survey end date
+
+    @property
+    def is_active(self):
+        """Check if the survey is currently active."""
+        now = datetime.utcnow()
+        if self.start_date and self.end_date:
+            return self.start_date <= now <= self.end_date
+        return False  # If either date is None, the survey is not active
+
+    @property
+    def is_completed(self):
+        """Check if the survey is completed."""
+        now = datetime.utcnow()
+        if self.end_date:
+            return now > self.end_date
+        return False  # If end_date is None, the survey is not completed
+
+
+
+from sqlalchemy import func
+class SurveyRating(db.Model):
+    __tablename__ = 'surveyrating'  # Lowercase table name
+
+    rating_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    survey_id = db.Column(db.Integer, db.ForeignKey('survey.survey_id'), nullable=False)
+    respondent_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
+    created_at = db.Column(db.TIMESTAMP, default=func.now())
+
 
 class Question(db.Model):
     __tablename__ = 'question'
@@ -44,7 +82,7 @@ class Response(db.Model):
     __tablename__ = 'response'
     response_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     survey_id = db.Column(db.Integer, db.ForeignKey('survey.survey_id'), nullable=False)
-    respondent_id = db.Column(db.Integer, db.ForeignKey('user.UserID'), nullable=False)
+    respondent_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)  # Updated ForeignKey
     submitted_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 class Answer(db.Model):
@@ -58,6 +96,7 @@ class Answer(db.Model):
 def init_db(app):
     with app.app_context():
         db.create_all()
+
 # Create User
 def create_user(name, phone_number, email_address, password, role_id):
     hashed_password = generate_password_hash(password)

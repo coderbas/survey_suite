@@ -156,7 +156,80 @@
           max-width: 600px;
           margin: 0 auto;
       }
+
+      a {
+        /* Existing styles */
+        text-decoration: none;
+          color: inherit;
+      }
+
+      a:hover {
+    transform: translateY(-5px);
+    background-color: #f0f0f0;
+    }
+
+
+    .charts {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .chart-container {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        canvas {
+            max-width: 100%;
+            max-height: 200px;
+        }
+
+
+.happiness-index {
+    font-size: 2em; /* Make the result bigger */
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center them horizontally in the div */
+    gap: 8px; /* Space between icon and text */
+    font-size: 4.5em; /* Adjust size as needed */
+}
+
+i {
+    font-size: 4.5em; /* Adjust size as needed */
+}
+
+.happiness-index #happiness-percentage {
+    margin-right: 10px; /* Spacing between the percentage and icon */
+}
+
+/* Color codes for different ranges */
+.green {
+    color: #1bcd18; /* Happy */
+}
+
+.yellow {
+    color: #ffd600; /* Neutral */
+}
+
+.red {
+    color: #ff3d00; /* Unhappy */
+}
+
+
+
+
+
+
       </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
+
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -164,10 +237,11 @@
     <aside class="sidebar">
         <h2>Admin Panel</h2>
         <ul>
-            <li><a href="#" class="active">Dashboard</a></li>
-            <li><a href="#">User Management</a></li>
-            <li><a href="#">Survey Analytics</a></li>
-            <li><a href="#">Settings</a></li>
+            
+            <li><a href="{{ url_for('routes.dashboard') }}" class="active">Dashboard</a></li>
+            <li><a href="{{ url_for('routes.user_management') }}">User Management</a></li>
+            <li><a href="{{ url_for('routes.analytics_reporting') }}">Survey Analytics</a></li>
+            <li><a href="{{ url_for('routes.settings') }}">Settings</a></li>
         </ul>
     </aside>
 
@@ -175,90 +249,207 @@
     <main class="main-content">
         <header class="header">
             <div class="search-bar">
-                <input type="text" placeholder="Search...">
-                <i class="search-icon">&#128269;</i>
+                <form action="{{ url_for('routes.search_survey') }}" method="GET">
+                    <input type="text" name="query" placeholder="Search survey...">
+                    <button type="submit" class="search-icon">&#128269;</button>
+                </form>
             </div>
-            <div class="user-info">
-                <img src="avatar.jpg" alt="User Avatar" class="avatar">
-                <span>Harley Pinero</span>
+            <div class="d-flex align-items-center">
+                <img src="{{ url_for('static', filename='person.svg') }}" alt="User Avatar" class="rounded-circle" style="width: 40px; height: 40px;">
+                <span class="ms-2">{{ user.name_en }}</span>
             </div>
         </header>
 
         <!-- Dashboard Stats -->
-        <section class="stats">
-            <div class="stat-card">
-                <h3>Crime Prevention Survey</h3>
-                <p>Responses: <span>3500</span></p>
+        <!-- Dashboard Stats -->
+<section class="stats">
+    {% if surveys %}
+        {% for survey, response_count in surveys %}
+        <a href="{{ url_for('routes.survey_analytics', survey_id=survey.survey_id) }}" class="stat-card">
+            <div >
+            
+                <h3>{{ survey.title }}</h3>
+                <p>Responses: <span>{{ response_count }}</span></p>
             </div>
-            <div class="stat-card">
-                <h3>Sex Prevention Survey</h3>
-                <p>Responses: <span>1000</span></p>
-            </div>
-            <div class="stat-card">
-                <h3>Tourism Experience Survey</h3>
-                <p>Responses: <span>5020</span></p>
-            </div>
-            <div class="stat-card">
-                <h3>Average Response Time</h3>
-                <p>Minutes: <span>03:45</span></p>
-            </div>
-        </section>
+        </a>
+        {% endfor %}
+    {% else %}
+        <div class="stat-card">
+            <h3>No results found</h3>
+        </div>
+    {% endif %}
+</section>
+<section class="charts">
+    <!-- Public Sentiment and Satisfaction by Service (Donut Chart) -->
+    <div class="chart-container">
+        <h3>Public Sentiment by Service</h3>
+        <canvas id="sentimentChart"></canvas>
+    </div>
 
-        <!-- User Analytics Section -->
-        <section class="analytics">
-            <h3>User Analytics</h3>
-            <canvas id="userChart" class="chart"></canvas>
-        </section>
+    <!-- Survey Participation Over Time (Line Chart) -->
+    <div class="chart-container">
+        <h3>Survey Participation Over Time</h3>
+        <canvas id="participationChart"></canvas>
+    </div>
 
-        <!-- Survey Participation Section -->
-        <section class="survey-participation">
-            <h3>Survey Participation</h3>
-            <canvas id="surveyChart" class="chart"></canvas>
-        </section>
+    <!-- Feedback by Demographic Group (Stacked Bar Chart) -->
+    <div id="happiness-index" class="chart-container">
+        <h3>Customer Happiness Index</h3>
+        <span id="happiness-index-value">0%</span>
+        <i id="happiness-icon" style="display: inline;" class="fa-light fa-face-smile-beam"></i> <!-- Font Awesome icon -->
+    </div>
+    
+    
+
+    <!-- Survey Engagement by Topic (3D Pie Chart) -->
+    <div class="chart-container">
+        <h3>Survey Engagement by Topic</h3>
+        <canvas id="engagementChart"></canvas>
+    </div>
+</section>
+        
     </main>
 
     <script>// User Analytics Bar Chart
-      const userCtx = document.getElementById('userChart').getContext('2d');
-      const userChart = new Chart(userCtx, {
-          type: 'bar',
-          data: {
-              labels: ['New Users', 'Active Users', 'Surveys Created', 'Surveys Completed'],
-              datasets: [{
-                  label: 'Users',
-                  data: [120, 300, 50, 45],
-                  backgroundColor: ['#c66', '#a44', '#f0a', '#333'],
-                  borderColor: '#fff',
-                  borderWidth: 2
-              }]
-          },
-          options: {
-              responsive: true,
-              scales: {
-                  y: {
-                      beginAtZero: true
-                  }
-              }
-          }
-      });
+
+    // Sentiment by Service (Donut Chart)
+    fetch('/sentiment-data')
+        .then(response => response.json())
+        .then(data => {
+            new Chart(document.getElementById("sentimentChart"), {
+                type: "doughnut",
+                data: {
+                    labels: ["Positive", "Neutral", "Negative"],
+                    datasets: [{
+                        data: [data.positive, data.neutral, data.negative],
+                        backgroundColor: ["#4CAF50", "#FFC107", "#F44336"],
+                        hoverOffset: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: "top" }
+                    }
+                }
+            });
+        });
+
+
+        
+        fetch('/happiness_index')
+    .then(response => response.json())
+    .then(data => {
+        const happinessIndex = data.happiness_index;
+        const happinessIndexValueElement = document.getElementById('happiness-index-value');
+        const happinessIcon = document.getElementById('happiness-icon');
+
+        happinessIndexValueElement.innerText = happinessIndex + '%'; // Append % sign
+
+        // Clear previous classes
+        happinessIndexValueElement.classList.remove('green', 'yellow', 'red');
+
+         // Determine the class and icon based on the index
+         if (happinessIndex >= 80) {
+            happinessIndexValueElement.className = 'happiness-index green';
+            happinessIcon.className = 'fa-solid fa-face-smile-beam fa-beat-fade'; // Use solid smile beam
+            happinessIcon.style.color = '#47ce2c';
+        } else if (happinessIndex >= 50) {
+            happinessIndexValueElement.className = 'happiness-index yellow';
+            happinessIcon.className = 'fa-solid fa-face-meh fa-beat-fade'; // Use solid meh face
+            happinessIcon.style.color = '#ffd600';
+        } else {
+            happinessIndexValueElement.className = 'happiness-index red';
+            happinessIcon.className = 'fa-solid fa-face-frown fa-beat-fade'; // Use solid frown face
+            happinessIcon.style.color = '#ff3d00';
+        }
+
+        happinessIcon.style.display = 'inline'; // Show the icon as inline
+    })
+    .catch(error => {
+        console.error('Error fetching happiness index:', error);
+    });
+
+
+
+
+
+
+        
+        async function fetchParticipationData() {
+        try {
+            const response = await fetch("/get-participation-data");
+            const data = await response.json();
+
+            // Create the line chart using fetched data
+            new Chart(document.getElementById("participationChart"), {
+                type: "line",
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: "Participation Count",
+                        data: data.data,
+                        fill: true,
+                        backgroundColor: "rgba(173, 216, 230, 0.3)",
+                        borderColor: "#00A4CC",
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: "top" }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        } catch (error) {
+            console.error("Error fetching participation data:", error);
+        }
+    }
+
+    // Fetch data and initialize chart on page load
+    window.onload = fetchParticipationData;
+
+      
       
       // Survey Participation Pie Chart
-      const surveyCtx = document.getElementById('surveyChart').getContext('2d');
-      const surveyChart = new Chart(surveyCtx, {
-          type: 'pie',
-          data: {
-              labels: ['Crime Prevention', 'Sex Prevention', 'Tourism Experience'],
-              datasets: [{
-                  label: 'Surveys',
-                  data: [3500, 1000, 5020],
-                  backgroundColor: ['#a44', '#c66', '#333'],
-                  borderColor: '#fff',
-                  borderWidth: 2
-              }]
-          },
-          options: {
-              responsive: true
-          }
-      });
+      fetch('/survey-participation-data')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.error) {
+            throw new Error(data.error);
+        }
+        const surveyCtx = document.getElementById('engagementChart').getContext('2d');
+        new Chart(surveyCtx, {
+            type: 'pie',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    label: 'Surveys',
+                    data: data.data,
+                    backgroundColor: ['#a44', '#c66', '#333', '#f0a', '#333'],
+                    borderColor: '#fff',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    })
+    .catch(error => console.error('Error fetching survey participation data:', error));
       </script>
+
+    
+
+
 </body>
 </html>

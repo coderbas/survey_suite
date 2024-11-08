@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ survey.title }} Analytics & Reporting</title> <!-- Dynamic Title -->
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+      /* Styles */
+      * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+      }
+      body {
+          font-family: 'Arial', sans-serif;
+          background-color: #f9f9f9;
+          padding: 20px;
+      }
+      .analytics-container {
+          max-width: 1200px;
+          margin: 0 auto;
+      }
+      h1 {
+          text-align: center;
+          font-size: 2.5rem;
+          margin-bottom: 20px;
+          color: #333;
+      }
+      .content {
+          display: flex;
+          flex-direction: column;
+          gap: 40px;
+      }
+      .visualization-section, .report-section {
+          background-color: #ffffff;
+          padding: 20px;
+          border-radius: 8px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          
+      }
+      h2 {
+          font-size: 1.8rem;
+          margin-bottom: 20px;
+          color: #555;
+      }
+      .visualizations {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 20px;
+      }
+      .visualization-card {
+          background-color: #f1f1f1;
+          border-radius: 10px;
+          padding: 15px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      canvas {
+          width: 100%;
+          max-height: 200px;
+      }
+      .generate-report-btn {
+          padding: 12px 24px;
+          background-color: #ff5757;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 1rem;
+      }
+      .generate-report-btn:hover {
+          background-color: #e14a4a;
+      }
+      .report-placeholder {
+          margin-top: 20px;
+          padding: 20px;
+          background-color: #f1f1f1;
+          text-align: center;
+          border-radius: 8px;
+          color: #666;
+          font-style: italic;
+          max-width: 80%;
+          font-size: 16px;
+          line-height: 1.6;
+          overflow-y: auto;
+          max-height: 400px;
+          border: 1px solid #ccc;
+      }
+    </style>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <!-- Sidebar Dropdown -->
+            <div class="navbar-nav">
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-bars"></i>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{{ url_for('routes.admin_dashboard') }}">Dashboard</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('routes.survey_management') }}">Survey Management</a></li>
+                        <li><a class="dropdown-item" href="#">Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{{ url_for('routes.logout') }}">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Brand Logo -->
+            <a class="navbar-brand mx-auto" href="{{ url_for('routes.admin_dashboard') }}">
+                <img src="{{ url_for('static', filename='fj_logo.jpeg') }}" alt="Logo" style="width: 70px;">
+            </a>
+            <!-- User Profile Icon and Name -->
+            <div class="d-flex align-items-center">
+                <img src="{{ url_for('static', filename='avatar.png') }}" alt="User Avatar" class="rounded-circle" style="width: 40px; height: 40px;">
+                <span class="ms-2">{{ user.name_en }}</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="analytics-container">
+        <h1>{{ survey.title }} Analytics & Reporting</h1> <!-- Dynamic Survey Title -->
+        <div class="content">
+            <div class="visualization-section">
+                <h2>Analytics</h2>
+                <div class="visualizations">
+                    {% for question in question_data %}
+                    <div class="visualization-card">
+                        <h3>{{ question.question_text }}</h3>
+                        <canvas id="chart-{{ loop.index }}"></canvas>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="report-section">
+                <h2>Generate AI-Powered Report</h2>
+                <p>Get a detailed AI-powered report based on survey responses.</p>
+                <button class="generate-report-btn" onclick="generateReport()">Generate Report</button>
+                <div class="report-placeholder" id="report-placeholder">
+                    <p>Your report will appear here once generated.</p>
+                </div>
+                <br>
+                <button id="download-button" class="generate-report-btn" onclick="exportToPDF()">Download Report</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questionData = JSON.parse('{{ question_data | tojson | safe }}');
+        
+        questionData.forEach((question, index) => {
+            const ctx = document.getElementById(`chart-${index + 1}`).getContext('2d');
+            let chartType = question.question_type === 'multipleChoice' ? 'bar' : 'pie';
+
+            let data = {
+                labels: [],
+                datasets: [{
+                    label: question.question_text,
+                    data: [],
+                    backgroundColor: ['#42a5f5', '#ffb6c1', '#ff5757', '#4caf50', '#ffa500'],
+                    borderWidth: 1,
+                }]
+            };
+
+            const answerCounts = {};
+            question.answers.forEach(answer => {
+                answerCounts[answer] = (answerCounts[answer] || 0) + 1;
+            });
+
+            data.labels = Object.keys(answerCounts);
+            data.datasets[0].data = Object.values(answerCounts);
+
+            new Chart(ctx, {
+                type: chartType,
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: chartType === 'bar' ? { y: { beginAtZero: true } } : {},
+                }
+            });
+        });
+
+        function generateReport() {
+            const surveyId = '{{ survey.survey_id }}';
+            fetch(`/generate-report/${surveyId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const reportPlaceholder = document.getElementById('report-placeholder');
+                if (data.error) {
+                    reportPlaceholder.innerHTML = `<p style="color: red;">Error: ${data.error}</p>`;
+                } else {
+                    reportPlaceholder.innerHTML = `<pre>${data.report}</pre>`;
+                }
+            })
+            .catch(error => console.error('Error generating report:', error));
+        }
+
+        function exportToPDF() {
+            const inputText = document.getElementById("report-placeholder").innerText;
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const maxLineWidth = pageWidth - 20;
+            const splitText = doc.splitTextToSize(inputText, maxLineWidth);
+            doc.text(splitText, 10, 10);
+            doc.save("ExportedText.pdf");
+        }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>

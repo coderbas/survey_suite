@@ -26,40 +26,42 @@
                 </div>
             {% endif %}
         {% endwith %}
+<form action="/register" method="POST">
+    <div class="input-container">
+        <input type="text" id="finance_no" name="finance_no" required>
+        <label for="finance_no">Finance No</label>
+    </div>
+    <div class="input-container">
+        <input type="text" id="name_ar" name="name_ar" required>
+        <label for="name_ar">Name (Arabic)</label>
+    </div>
+    <div class="input-container">
+        <input type="text" id="name_en" name="name_en" required>
+        <label for="name_en">Name (English)</label>
+    </div>
+    <div class="input-container">
+        <input type="email" id="email_id" name="email_id" required>
+        <label for="email_id">Email</label>
+    </div>
+    <div class="input-container">
+        <input type="text" id="mobile_no" name="mobile_no" required>
+        <label for="mobile_no">Mobile No</label>
+    </div>
+    <div class="input-container">
+        <input type="text" id="section" name="section" required>
+        <label for="section">Section</label>
+    </div>
+    <div class="input-container">
+        <input type="password" id="password" name="password" required>
+        <label for="password">Password</label>
+    </div>
+    <div class="input-container">
+        <input type="password" id="confirm_password" name="confirm_password" required>
+        <label for="confirm_password">Confirm Password</label>
+    </div>
+    <button type="submit">Register</button>
+</form>
 
-        <form action="/register" method="POST" id="registrationForm">
-            <div class="input-container">
-                <input type="text" id="name" name="name" required>
-                <label for="name">Name</label>
-            </div>
-            <div class="input-container">
-                <input type="text" id="telephone" name="telephone" required>
-                <label for="telephone">Telephone</label>
-            </div>
-            <div class="input-container">
-                <input type="email" id="email" name="email" required>
-                <label for="email">Email</label>
-            </div>
-            <div class="input-container">
-                <input type="password" id="password" name="password" required>
-                <label for="password">Password</label>
-            </div>
-            <div class="input-container">
-                <input type="password" id="confirm_password" name="confirm_password" required>
-                <label for="confirm_password">Confirm Password</label>
-            </div>
-            <div class="input-container">
-                <select id="role" name="role" required>
-                    <option value="" disabled selected>Select Role</option>
-                    {% for role in roles %}
-                        <option value="{{ role.RoleID }}">{{ role.RoleName }}</option>
-                    {% endfor %}
-                </select>
-                <label for="role">Role</label>
-            </div>
-            
-            <button type="submit">Register</button>
-        </form>
     </div>
 
     <script>

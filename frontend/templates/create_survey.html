@@ -4,41 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Survey</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome for icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='create_survey.css') }}">
-
 </head>
 <body>
 
-   
-
-    <div class="container">
-        <h1>Create Survey</h1>
-        <form action="/create-survey" method="POST" id="surveyForm">
-            <div class="form-group">
-                <label for="surveyTitle">Survey Title</label>
-                <input type="text" id="surveyTitle" name="surveyTitle" required>
-            </div>
-
-            <div class="form-group">
-                <label for="surveyDescription">Survey Description</label>
-                <textarea id="surveyDescription" name="surveyDescription" rows="3" required></textarea>
-            </div>
-
-            <div id="questionsContainer">
-                <h2>Questions</h2>
-            </div>
-
-            <button type="button" id="addQuestionButton">Add Question</button>
-            <button type="submit">Create Survey</button>
-        </form>
+<div class="container survey-container">
+    <div class="survey-header">
+        <h1><i class="fas fa-poll-h"></i> Create Your Survey</h1>
     </div>
+    <form action="/create-survey" method="POST" id="surveyForm">
+        <div class="form-group">
+            <label for="surveyTitle">Survey Title</label>
+            <input type="text" id="surveyTitle" name="title" class="form-control" required>
+        </div>
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <div class="form-group">
+            <label for="surveyDescription">Survey Description</label>
+            <textarea id="surveyDescription" name="description" rows="3" class="form-control" required></textarea>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <label for="startDate">Start Date</label>
+                <input type="date" id="startDate" name="start_date" class="form-control" required>
+            </div>
+            <div class="col-md-6 form-group">
+                <label for="endDate">End Date</label>
+                <input type="date" id="endDate" name="end_date" class="form-control" required>
+            </div>
+        </div>
+
+        <div id="questionsContainer">
+            <h2>Survey Questions</h2>
+        </div>
+
+        <div class="button-group">
+            <button type="button" id="addQuestionButton" class="btn btn-outline-primary add-question-btn">
+                <i class="fas fa-plus-circle"></i> Add Question
+            </button>
+            <button type="button" id="clearSurveyButton" class="btn btn-secondary">Clear Survey</button>
+            <button type="submit" class="btn btn-danger create-survey-btn">Create Survey</button>
+        </div>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
 </body>
 </html>
